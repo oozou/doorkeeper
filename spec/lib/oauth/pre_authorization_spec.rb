@@ -152,14 +152,14 @@ module Doorkeeper::OAuth
       expect(subject).not_to be_authorizable
     end
 
-    describe "as_json" do
-      let(:client_id){ 'client_uid_123' }
-      let(:client_name){ 'Acme Co.' }
+    describe 'as_json' do
+      let(:client_id) { 'client_uid_123' }
+      let(:client_name) { 'Acme Co.' }
       before do
         allow(client).to receive(:uid).and_return client_id
         allow(client).to receive(:name).and_return client_name
       end
-      let(:json){ subject.as_json({}) }
+      let(:json) { subject.as_json({}) }
       it { is_expected.to respond_to :as_json }
       it 'returns correct values' do
         expect(json[:client_id]).to eq client_id
