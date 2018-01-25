@@ -249,10 +249,8 @@ doorkeeper.
     option :realm,                          default: 'Doorkeeper'
     option :force_ssl_in_redirect_uri,      default: !Rails.env.development?
     option :grant_flows,                    default: %w(authorization_code client_credentials)
-    option :access_token_generator,
-           default: 'Doorkeeper::OAuth::Helpers::UniqueToken'
-    option :base_controller,
-           default: 'ActionController::Base'
+    option :access_token_generator, default: 'Doorkeeper::OAuth::Helpers::UniqueToken'
+    option :base_controller, default: :default_controller
 
     attr_reader :reuse_access_token
     attr_reader :api_mode
@@ -319,6 +317,10 @@ doorkeeper.
       types = grant_flows - ['implicit']
       types << 'refresh_token' if refresh_token_enabled?
       types
+    end
+
+    def default_controller
+      api_mode ? 'ActionController::Api' : 'ActionController::Base'
     end
   end
 end
