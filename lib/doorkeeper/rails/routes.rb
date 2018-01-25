@@ -23,7 +23,6 @@ module Doorkeeper
       end
 
       def generate_routes!(options)
-        skip_web_if_api_only(options)
         routes.scope options[:scope] || 'oauth', as: 'oauth' do
           map_route(:authorizations, :authorization_routes)
           map_route(:tokens, :token_routes)
@@ -35,12 +34,6 @@ module Doorkeeper
       end
 
       private
-
-      def skip_web_if_api_only(options)
-        if options[:api_only]
-          @mapping.skips.push(:applications, :authorized_applications)
-        end
-      end
 
       def map_route(name, method)
         unless @mapping.skipped?(name)
