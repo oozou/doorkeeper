@@ -165,7 +165,7 @@ describe Doorkeeper, 'configuration' do
 
   describe 'enable_application_owner' do
     it 'is disabled by default' do
-      expect(Doorkeeper.configuration.enable_application_owner?).not_to be_truthy
+      expect(subject.enable_application_owner?).not_to be_truthy
     end
 
     context 'when enabled without confirmation' do
@@ -179,7 +179,7 @@ describe Doorkeeper, 'configuration' do
         expect(Doorkeeper::Application.new).to respond_to :owner
       end
       it 'Doorkeeper.configuration.confirm_application_owner? returns false' do
-        expect(Doorkeeper.configuration.confirm_application_owner?).not_to be_truthy
+        expect(subject.confirm_application_owner?).not_to be_truthy
       end
     end
 
@@ -194,14 +194,14 @@ describe Doorkeeper, 'configuration' do
         expect(Doorkeeper::Application.new).to respond_to :owner
       end
       it 'Doorkeeper.configuration.confirm_application_owner? returns true' do
-        expect(Doorkeeper.configuration.confirm_application_owner?).to be_truthy
+        expect(subject.confirm_application_owner?).to be_truthy
       end
     end
   end
 
   describe 'realm' do
     it 'is \'Doorkeeper\' by default' do
-      expect(Doorkeeper.configuration.realm).to eq('Doorkeeper')
+      expect(subject.realm).to eq('Doorkeeper')
     end
 
     it 'can change the value' do
@@ -215,7 +215,7 @@ describe Doorkeeper, 'configuration' do
 
   describe "grant_flows" do
     it "is set to all grant flows by default" do
-      expect(Doorkeeper.configuration.grant_flows).
+      expect(subject.grant_flows).
         to eq(%w(authorization_code client_credentials))
     end
 
@@ -290,9 +290,7 @@ describe Doorkeeper, 'configuration' do
       @config = nil
     end
 
-    expect do
-      Doorkeeper.configuration
-    end.to raise_error Doorkeeper::MissingConfiguration
+    expect(subject).to raise_error Doorkeeper::MissingConfiguration
 
     Doorkeeper.module_eval do
       @config = old_config
@@ -301,7 +299,7 @@ describe Doorkeeper, 'configuration' do
 
   describe 'access_token_generator' do
     it 'is \'Doorkeeper::OAuth::Helpers::UniqueToken\' by default' do
-      expect(Doorkeeper.configuration.access_token_generator).to(
+      expect(subject.access_token_generator).to(
         eq('Doorkeeper::OAuth::Helpers::UniqueToken')
       )
     end
@@ -317,7 +315,7 @@ describe Doorkeeper, 'configuration' do
 
   describe 'base_controller' do
     context 'default' do
-      it { expect(Doorkeeper.configuration.base_controller).to eq('ActionController::Base') }
+      it { expect(subject.base_controller).to eq('ActionController::Base') }
     end
 
     context 'custom' do
@@ -328,13 +326,14 @@ describe Doorkeeper, 'configuration' do
         end
       end
 
-      it { expect(Doorkeeper.configuration.base_controller).to eq('ApplicationController') }
+      it { expect(subject.base_controller).to eq('ApplicationController') }
     end
   end
-  
+
   describe 'api_mode' do
     it 'is false by default' do
       expect(subject.api_mode).to be_falsey
+      it { expect(subject.base_controller).to eq('ActionController::Base') }
     end
 
     it 'can change the value' do
@@ -343,6 +342,7 @@ describe Doorkeeper, 'configuration' do
         api_mode
       end
       expect(subject.api_mode).to be_truthy
+      it { expect(subject.base_controller).to eq('ActionController::Api') }
     end
   end
 end

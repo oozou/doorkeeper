@@ -20,7 +20,7 @@ module Doorkeeper
       def initialize(routes, &block)
         @routes = routes
         @mapping = Mapper.new.map(&block)
-        @mapping.skips.push(:applications, :authorized_applications) if Doorkeeper.configuration.api_mode
+        @mapping.skips.push(:applications, :authorized_applications) if Doorkeeper.configuration.skip_web
       end
 
       def generate_routes!(options)

@@ -153,10 +153,20 @@ doorkeeper.
         @config.instance_variable_set('@base_controller', base_controller)
       end
 
+      # Use an Web Only mode for applications generated with --api argument
+      # It will skip applictions and authorized_applications controllers
+      def web_only
+        @config.instance_variable_set("@web_only", true)
+      end
+
       # Use an API mode for applications generated with --api argument
       # It will skip applications controller, disable forgery protection
       def api_mode
         @config.instance_variable_set("@api_mode", true)
+        unless instance_variable_get("@base_controller")
+          @config.instance_variable_set("@base_controller",
+                                        "ActionController::Api")
+        end
       end
     end
 
@@ -250,10 +260,11 @@ doorkeeper.
     option :force_ssl_in_redirect_uri,      default: !Rails.env.development?
     option :grant_flows,                    default: %w(authorization_code client_credentials)
     option :access_token_generator, default: 'Doorkeeper::OAuth::Helpers::UniqueToken'
-    option :base_controller, default: :default_controller
+    option :base_controller, default: 'ActionController::Base'
 
     attr_reader :reuse_access_token
     attr_reader :api_mode
+    attr_reader :skip_web
 
     def refresh_token_enabled?
       @refresh_token_enabled ||= false
@@ -317,10 +328,6 @@ doorkeeper.
       types = grant_flows - ['implicit']
       types << 'refresh_token' if refresh_token_enabled?
       types
-    end
-
-    def default_controller
-      api_mode ? 'ActionController::Api' : 'ActionController::Base'
     end
   end
 end
