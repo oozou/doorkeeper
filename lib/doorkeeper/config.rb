@@ -163,10 +163,10 @@ doorkeeper.
       # It will skip applications controller, disable forgery protection
       def api_mode
         @config.instance_variable_set("@api_mode", true)
-        unless instance_variable_get("@base_controller")
-          @config.instance_variable_set("@base_controller",
-                                        "ActionController::Api")
-        end
+        # unless instance_variable_get("@base_controller")
+          # @config.instance_variable_set("@base_controller",
+                                        # "ActionController::Api")
+        # end
       end
     end
 
