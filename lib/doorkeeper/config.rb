@@ -166,8 +166,8 @@ doorkeeper.
 
       # when using api mode the controllers will return json and not protect
       # from forgery
-      def api_mode(api_mode)
-        @config.instance_variable_set('@api_mode', api_mode)
+      def api_mode
+        @config.instance_variable_set('@api_mode', true)
       end
     end
 
