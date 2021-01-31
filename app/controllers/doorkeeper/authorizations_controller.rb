@@ -1,5 +1,5 @@
 module Doorkeeper
-  class AuthorizationsController < Doorkeeper::ApplicationController
+  class AuthorizationsController < Doorkeeper::ApiController
     before_action :authenticate_resource_owner!
 
     def new
